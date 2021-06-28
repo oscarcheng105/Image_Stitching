@@ -4,7 +4,7 @@
 
 * Name your two pictures IMG1.jpeg and IMG2.jpeg
 
-* Choose Detector (SIFT or ORB), Matcher, Match Method
+* Choose Detector (SIFT or ORB), Matcher (BruteForce or FLANN), Match Method (match or knnMatch)
 
 * Run Code
 
