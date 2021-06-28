@@ -10,10 +10,14 @@
 
 ```
 python3 SIFT_BF_match.py
+#or
 python3 SIFT_BF_knnMatch.py
+#or
 python3 SIFT_FLANN_knnMatch.py
-
+#or
 python3 ORB_BF_match.py
+#or
 python3 ORB_BF_knnMatch.py
+#or
 python3 ORB_FLANN_knnMatch.py
 ```
