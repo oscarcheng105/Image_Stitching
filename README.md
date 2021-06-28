@@ -1,10 +1,10 @@
 # Image_Stitching
 
-*Install opencv-contrib-python through ```pip install opencv-contrib-python```
+* Install opencv-contrib-python through ```pip install opencv-contrib-python```
 
-*Name your two pictures IMG1.jpeg and IMG2.jpeg
+* Name your two pictures IMG1.jpeg and IMG2.jpeg
 
-*Choose Detector (SIFT or ORB), Matcher, Match Method
+* Choose Detector (SIFT or ORB), Matcher, Match Method
 
 * Run Code
 
