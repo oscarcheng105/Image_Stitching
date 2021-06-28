@@ -1,7 +1,9 @@
 import cv2 as cv
+import numpy as np
+import warping 
 
-img1 = cv.imread("IMG1.jpeg", cv.IMREAD_GRAYSCALE)
-img2 = cv.imread("IMG2.jpeg", cv.IMREAD_GRAYSCALE)
+img1 = cv.imread("IMG1.jpeg")
+img2 = cv.imread("IMG2.jpeg")
 
 # Initiate SIFT detector
 orb = cv.ORB_create()
@@ -23,17 +25,35 @@ matches = flann.knnMatch(des1, des2, k=2)
 matchesMask = [[0,0] for i in range(len(matches))]
 
 # ratio test as per Lowe's paper
+good = []
 for i, m_n in enumerate(matches):
   if len(m_n) != 2:
     continue
-  elif m_n[0].distance < 0.75*m_n[1].distance:
-    matchesMask[i]=[1,0]
+  if m_n[0].distance < 0.75*m_n[1].distance:
+    matchesMask[i] = [1,0]
+    good.append([m_n[0]])
 
 draw_params = dict(matchColor = (0,255,0),
                    singlePointColor = (0,0,255),
-                   matchesMask = matchesMask,
+                   #matchesMask = matchesMask,
                    flags = cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-img = cv.drawMatchesKnn(img1,kp1,img2,kp2, matches,None,**draw_params)
+img = cv.drawMatchesKnn(img1,kp1,img2,kp2,good,None,**draw_params)
 
-cv.imwrite("ORB_FLANN_knnMatch.jpeg", img)
+MIN_MATCH_COUNT = 10
+
+if len(good) > MIN_MATCH_COUNT:
+    src_pts = np.float32([ kp1[m[0].queryIdx].pt for m in good ]).reshape(-1,1,2)
+    dst_pts = np.float32([ kp2[m[0].trainIdx].pt for m in good ]).reshape(-1,1,2)
+
+    #WarpImages1
+    #M, mask = cv.findHomography(src_pts, dst_pts, cv.RANSAC, 5.0)
+    #result = warping.warpImages1(img2, img1, M)
+
+    #WarpImages2
+    M, mask = cv.findHomography(dst_pts, src_pts, cv.RANSAC, 5.0)
+    result = warping.warpImages2(img2, img1, M)
+
+cv.imshow("Match", img)
+cv.imshow("Image Stitch", result)
+k = cv.waitKey(0)
